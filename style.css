@@ -1,0 +1,68 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap; /* allows stacking */
+}
+
+.form-section, .receipt-section {
+    width: 100%;
+    max-width: 320px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.form-section input, .form-section button {
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.receipt-section {
+    border: 1px dashed #000;
+    font-family: monospace;
+    font-size: 14px;
+    padding: 15px;
+}
+
+.center {
+    text-align: center;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.line {
+    border-bottom: 1px dashed #000;
+    margin: 8px 0;
+}
+
+.right {
+    text-align: right;
+}
+
+/* ✅ Mobile adjustments */
+@media (max-width: 600px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .form-section, .receipt-section {
+        max-width: 95%;
+        padding: 15px;
+    }
+}
