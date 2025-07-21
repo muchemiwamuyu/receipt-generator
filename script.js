@@ -1,79 +1,123 @@
-document.getElementById('generateBtn').addEventListener('click', () => {
-    const businessName = document.getElementById('businessName').value;
-    const kraPin = document.getElementById('kraPin').value;
-    const item = document.getElementById('item').value;
-    const price = parseFloat(document.getElementById('price').value);
-    const vatRate = parseFloat(document.getElementById('vatRate').value);
+const modal = document.getElementById("confirmModal");
+const confirmBtn = document.getElementById("confirmBtn");
+const cancelBtn = document.getElementById("cancelBtn");
 
-    // Calculate VAT and totals
-    const vatAmount = (price * vatRate) / 116; // VAT portion from total
-    const subtotal = price - vatAmount;
+let receiptData = {}; // Temporary store
 
-    // Get current date and time
-    const now = new Date();
-    const date = now.toLocaleDateString();
-    const time = now.toLocaleTimeString();
+document.getElementById("generateBtn").addEventListener("click", () => {
+  const businessName = document.getElementById("businessName").value;
+  const kraPin = document.getElementById("kraPin").value;
+  const item = document.getElementById("item").value;
+  const price = parseFloat(document.getElementById("price").value);
 
-    // generate random business pin
-    function generateBusinessPin() {
-        const businessPrefix = 'PO'
-        const randomNumb = Math.floor(500000000 + Math.random() * 800000000)
-        return businessPrefix + randomNumb;
-    }
+  receiptData = { businessName, kraPin, item, price };
 
-    const bizPin = generateBusinessPin();
+  // Prefill modal fields
+  document.getElementById("poBox").value = "P.O. Box 312-00100";
+  document.getElementById("editPrice").value = price;
 
-    // generate serial no
-    function generateCNumber() {
-        const prefix = 'KRAM'
-        const randomPart = Math.floor(100000000000000 + Math.random() * 900000000000000);
-        return prefix + randomPart
-    }
-
-    const serial = generateCNumber()
-
-    // generating the qr code
-    const qrData = `Business: ${businessName}\nPIN: ${kraPin}\nInvoice: ${serial}\nAmount: ${price}\nDate: ${date}`;
-
-    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(qrData)}`;
-
-
-    // Generate Receipt HTML
-    const receiptHTML = `
-        <div class="center bold">${businessName}</div>
-        <div class="center">P.O BOX 312 - 10100</div>
-        <DIV class="center">NYERI</DIV>
-        <div class="center">PIN: ${kraPin}</div>
-        <div class="line"></div>
-        <div class="bizpin"> PIN: ${bizPin}</div>
-        <div class="center bold">FISCAL RECEIPT</div>
-        <div class="line"></div>
-        <table style="width:100%;">
-            <tr><td>${item}</td><td class="right">${price.toFixed(2)}</td></tr>
-            <tr><td>SUBTOTAL</td><td class="right">${subtotal.toFixed(2)}</td></tr>
-        </table>
-        <div class="line"></div>
-        <table style="width:100%;">
-            <tr><td class="bold">TOTAL</td><td class="right bold">${price.toFixed(2)}</td></tr>
-            <tr><td>TOTAL TAX A</td><td class="right">${vatAmount.toFixed(2)}</td></tr>
-            <tr><td>TOTAL TAXES</td><td class="right">${vatAmount.toFixed(2)}</td></tr>
-        </table>
-        <div class="line"></div>
-        <table style="width:100%;">
-        <tr><td class="left">CASH</td><td class="right">${price.toFixed(2)}</td></tr>
-        <tr><td class="left">01 ARTICLES</td><td class="right"></td></tr>
-        </table>
-        <div class="line"></div>
-        <div class="center">- Control Unit Info -</div>
-        <div class="center">CU S/No: ${serial}</div>
-        <div class="center">CU INVOICE NUMBER: ${Math.floor(1000000000000000 + Math.random() * 900000000000000)}</div>
-        <br />
-        <div class="qr center"><img src="${qrUrl}" alt="QR Code"></div>
-        <br />
-        <div class="center">${date} ${time}</div>
-        <div class="center bold">FISCAL RECEIPT</div>
-    `;
-
-    document.getElementById('receiptPreview').innerHTML = receiptHTML;
+  modal.style.display = "flex";
 });
 
+// Confirm changes and generate receipt
+confirmBtn.addEventListener("click", () => {
+  const poBox = document.getElementById("poBox").value;
+  const newPrice = parseFloat(document.getElementById("editPrice").value);
+
+  modal.style.display = "none";
+
+  generateReceipt(
+    receiptData.businessName,
+    receiptData.kraPin,
+    receiptData.item,
+    newPrice,
+    poBox
+  );
+});
+
+// Cancel action
+cancelBtn.addEventListener("click", () => {
+  modal.style.display = "none";
+});
+
+function generateReceipt(businessName, kraPin, item, price, poBox) {
+  const vatRate = parseFloat(document.getElementById("vatRate").value);
+  const vatAmount = 0.00
+  const subtotal = price;
+
+  const now = new Date();
+  const date = now.toLocaleDateString();
+  const time = now.toLocaleTimeString();
+
+  const bizPin = generateBusinessPin();
+  const serial = generateCNumber();
+
+  const qrData = `Business: ${businessName}\nPIN: ${kraPin}\nInvoice: ${serial}\nAmount: ${price}\nDate: ${date}`;
+
+  const receiptHTML = `
+    <div class="center bold">${businessName}</div>
+    <div class="center">${poBox}</div>
+    <div class="center">PIN: ${kraPin}</div>
+    <div class="line"></div>
+    <div class="businessPin">PIN: ${bizPin}</div>
+    <div class="center bold">FISCAL RECEIPT</div>
+    <div class="line"></div>
+    <table style="width:100%;">
+        <tr><td>${item}</td><td class="right">${price.toFixed(2)}</td></tr>
+        <tr><td>SUBTOTAL</td><td class="right">${subtotal.toFixed(2)}</td></tr>
+    </table>
+    <div class="line"></div>
+    <table style="width:100%;">
+        <tr><td class="bold">TOTAL</td><td class="right bold">${price.toFixed(2)}</td></tr>
+        <tr><td>TOTAL TAX A</td><td class="right">${vatAmount.toFixed(2)}</td></tr>
+        <tr><td>TOTAL TAXES</td><td class="right">${vatAmount.toFixed(2)}</td></tr>
+    </table>
+    <div class="line"></div>
+    <table style="width:100%;">
+        <tr><td class="left">CASH</td><td class="right">${price.toFixed(2)}</td></tr>
+        <tr><td class="left">01 ARTICLES</td><td class="right"></td></tr>
+    </table>
+    <div class="line"></div>
+    <div class="center">- Control Unit Info -</div>
+    <div class="center">CU S/No: ${serial}</div>
+    <div class="center">CU INVOICE NUMBER: ${Math.floor(10000000000 + Math.random() * 50000000000)}</div>
+    <br />
+    <div id="qrCode" class="centqr"></div>
+    <br />
+    <div class="center">${date} ${time}</div>
+    <div class="center bold">FISCAL RECEIPT</div>
+  `;
+
+  document.getElementById("receiptPreview").innerHTML = receiptHTML;
+  new QRCode(document.getElementById("qrCode"), { text: qrData, width: 120, height: 120 });
+}
+
+function generateBusinessPin() {
+  const prefix = "PO";
+  const randomNumb = Math.floor(500000000 + Math.random() * 800000000);
+  return prefix + randomNumb;
+}
+
+function generateCNumber() {
+  const prefix = "KRAM";
+  const randomPart = Math.floor(100000000000000 + Math.random() * 900000000000000);
+  return prefix + randomPart;
+}
+
+// PDF Download
+document.getElementById("downloadBtn").addEventListener("click", () => {
+  const receiptPreviews = document.getElementById("receiptPreview");
+  const businessName = document.getElementById("businessName").value.trim() || "ETR_Receipt";
+
+  html2canvas(receiptPreviews).then((canvas) => {
+    const imgData = canvas.toDataURL("image/png");
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
+
+    const imgWidth = 200;
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const x = (pageWidth - imgWidth) / 2;
+    pdf.addImage(imgData, "PNG", x, 40, imgWidth, 0);
+    pdf.save(`${businessName.replace(/\\s+/g, '_')}_Receipt.pdf`);
+  });
+});

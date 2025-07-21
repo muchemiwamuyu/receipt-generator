@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ETR Receipt Generator</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETR Receipt Generator</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="container">
         <!-- Input Form -->
@@ -13,7 +15,7 @@
             <h2>ETR Receipt Generator</h2>
             <label>Business Name:</label>
             <input type="text" id="businessName" value="EDWIN ENTERPRISES">
-            
+
             <label>KRA PIN:</label>
             <input type="text" id="kraPin" value="A012508032F">
 
@@ -26,9 +28,10 @@
             <label>VAT Rate (%):</label>
             <input type="number" id="vatRate" value="16">
 
-            <button id="generateBtn">Generate Receipt</button>
+            <button id="generateBtn">Generate receipt</button>
             <br />
-            <button id="editDocuments">Edit reciepts</button>
+            <button id="downloadBtn">Download</button>
+
         </div>
 
         <!-- Receipt Preview -->
@@ -37,7 +40,29 @@
                 <!-- Receipt will be generated here -->
             </div>
         </div>
+
+        <!-- Confirmation Modal -->
+        <div id="confirmModal" class="modal">
+            <div class="modal-content">
+                <h3>Confirm Receipt Details</h3>
+                <label for="poBox">PO Box:</label>
+                <input type="text" id="poBox" placeholder="Enter PO Box" />
+
+                <label for="editPrice">Price:</label>
+                <input type="number" id="editPrice" />
+
+                <div class="modal-buttons">
+                    <button id="confirmBtn">Confirm</button>
+                    <button id="cancelBtn">Cancel</button>
+                </div>
+            </div>
+        </div>
+
     </div>
-<script src="./script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="./script.js"></script>
 </body>
+
 </html>
