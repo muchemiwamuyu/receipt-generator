@@ -14,25 +14,38 @@ document.getElementById('generateBtn').addEventListener('click', () => {
     const date = now.toLocaleDateString();
     const time = now.toLocaleTimeString();
 
-    // function for generating  CU s/no
-    function generateSKraSNumber(count, min, max) {
-        const numbers = []
-
-        for(let i = 0; i < count; i++) {
-            const random = Math.floor(Math.random() * (max - min + 1 )) + min;
-            numbers.push(random)
-        }
-
-        return numbers
+    // generate random business pin
+    function generateBusinessPin() {
+        const businessPrefix = 'PO'
+        const randomNumb = Math.floor(500000000 + Math.random() * 800000000)
+        return businessPrefix + randomNumb;
     }
 
-    generateSKraSNumber(14, 0, 5)
+    const bizPin = generateBusinessPin();
+
+    // generate serial no
+    function generateCNumber() {
+        const prefix = 'KRAM'
+        const randomPart = Math.floor(100000000000000 + Math.random() * 900000000000000);
+        return prefix + randomPart
+    }
+
+    const serial = generateCNumber()
+
+    // generating the qr code
+    const qrData = `Business: ${businessName}\nPIN: ${kraPin}\nInvoice: ${serial}\nAmount: ${price}\nDate: ${date}`;
+
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(qrData)}`;
+
 
     // Generate Receipt HTML
     const receiptHTML = `
         <div class="center bold">${businessName}</div>
+        <div class="center">P.O BOX 312 - 10100</div>
+        <DIV class="center">NYERI</DIV>
         <div class="center">PIN: ${kraPin}</div>
         <div class="line"></div>
+        <div class="bizpin"> PIN: ${bizPin}</div>
         <div class="center bold">FISCAL RECEIPT</div>
         <div class="line"></div>
         <table style="width:100%;">
@@ -46,22 +59,21 @@ document.getElementById('generateBtn').addEventListener('click', () => {
             <tr><td>TOTAL TAXES</td><td class="right">${vatAmount.toFixed(2)}</td></tr>
         </table>
         <div class="line"></div>
-        <div>CASH <span class="right">${price.toFixed(2)}</span></div>
-        <div>01 ARTICLES</div>
+        <table style="width:100%;">
+        <tr><td class="left">CASH</td><td class="right">${price.toFixed(2)}</td></tr>
+        <tr><td class="left">01 ARTICLES</td><td class="right"></td></tr>
+        </table>
         <div class="line"></div>
         <div class="center">- Control Unit Info -</div>
-        <div class="center" id='serial'>CU S/No: KRAM</div>
-        <div class="center" id=''>CU INVOICE NUMBER: 0044848445454544454</div>
+        <div class="center">CU S/No: ${serial}</div>
+        <div class="center">CU INVOICE NUMBER: ${Math.floor(1000000000000000 + Math.random() * 900000000000000)}</div>
+        <br />
+        <div class="qr center"><img src="${qrUrl}" alt="QR Code"></div>
+        <br />
         <div class="center">${date} ${time}</div>
         <div class="center bold">FISCAL RECEIPT</div>
     `;
 
-    const displaySerial = document.getElementById('serial')
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const numbers = generateSKraSNumber(14, 1, 5) // generate dummy
-        displaySerial.textContent = numbers.join(',')
-    })
-
     document.getElementById('receiptPreview').innerHTML = receiptHTML;
 });
+

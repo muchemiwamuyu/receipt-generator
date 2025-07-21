@@ -16,13 +16,13 @@ body {
     width: 100%;
     max-width: 320px;
     background: #fff;
-    padding: 20px;
+    padding: 28px;
     border-radius: 8px;
     margin-bottom: 20px;
 }
 
 .form-section input, .form-section button {
-    width: 100%;
+    width: 90%;
     margin-bottom: 12px;
     padding: 10px;
     font-size: 14px;
@@ -39,6 +39,7 @@ body {
 
 .center {
     text-align: center;
+    font-weight: 400;
 }
 
 .bold {
@@ -51,18 +52,23 @@ body {
 }
 
 .right {
-    text-align: right;
+    text-align: center;
 }
 
-/* ✅ Mobile adjustments */
-@media (max-width: 600px) {
+
+.bizpin {
+    text-align: center;
+}
+
+/* Mobile adjustments */
+@media (max-width: 500px) {
     .container {
         flex-direction: column;
         align-items: center;
     }
 
     .form-section, .receipt-section {
-        max-width: 95%;
-        padding: 15px;
+        max-width: 90%;
+        padding: 10px;
     }
 }
