@@ -16,13 +16,16 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   document.getElementById("poBox").value = "P.O. Box 312-00100";
   document.getElementById("editPrice").value = price;
 
+  const today = new Date().toISOString().split("T")[0];
+  document.getElementById("editDate").value = today;
+
   modal.style.display = "flex";
 });
 
-// Confirm changes and generate receipt
 confirmBtn.addEventListener("click", () => {
   const poBox = document.getElementById("poBox").value;
   const newPrice = parseFloat(document.getElementById("editPrice").value);
+  const selectedDate = document.getElementById("editDate").value;
 
   modal.style.display = "none";
 
@@ -31,23 +34,24 @@ confirmBtn.addEventListener("click", () => {
     receiptData.kraPin,
     receiptData.item,
     newPrice,
-    poBox
+    poBox,
+    selectedDate
   );
 });
+
 
 // Cancel action
 cancelBtn.addEventListener("click", () => {
   modal.style.display = "none";
 });
 
-function generateReceipt(businessName, kraPin, item, price, poBox) {
+function generateReceipt(businessName, kraPin, item, price, poBox, selectedDate) {
   const vatRate = parseFloat(document.getElementById("vatRate").value);
   const vatAmount = 0.00
   const subtotal = price;
 
-  const now = new Date();
-  const date = now.toLocaleDateString();
-  const time = now.toLocaleTimeString();
+  const date = selectedDate || new Date().toLocaleDateString();
+  const time = new Date().toLocaleTimeString();
 
   const bizPin = generateBusinessPin();
   const serial = generateCNumber();
